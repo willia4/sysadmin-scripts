@@ -12,8 +12,11 @@ require 'api_keys.rb'
 
 USER_ID = '369276'
 
-
 importer = GoodreadsImporter.new(API_KEY)
+
+#url = BASE_URL + "review/list.xml?key=#{@api_key}&id=#{user_id}&sort=date_read&order=d&per_page=#{number}&shelf=read"
+# importer.apiCall("review/list.xml", true, {"id" => USER_ID, "sort" => "date_read", "order" => "d", "per_page" => "5", "self" => "read"})
+# abort("done")
 books = importer.listBooks(USER_ID, 5)
 
 if books.count <= 0 then
@@ -21,7 +24,7 @@ if books.count <= 0 then
 end
 
 books.each_with_index do |book, index|
-	print "#{index}: #{book[:title]}\n"
+	print "#{index}: #{book.title}\n"
 end
 
 STDOUT.flush()
@@ -41,4 +44,4 @@ if !(selected_review >= 0 && selected_review < books.count) then
 	abort("Selection was not a valid choice")
 end
 
-# print books.inspect
+importer.importReview(books[selected_review])
